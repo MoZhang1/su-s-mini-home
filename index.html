@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mrs Su's Mini Room</title>
+  <style>
+    /* 基础布局 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #f6f2e9;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin: 20px 0 10px;
+      font-size: 2.2rem;
+      color: #4a4a4a;
+    }
+    #toggle-wrapper {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    /* 自定义开关样式 */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 34px;
+      transition: .4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: #66bb6a;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+    /* Canvas容器 */
+    #container {
+      position: absolute;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 120px);
+    }
+    /* 预加载覆盖层 */
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 100;
+    }
+    #overlay img {
+      max-width: 300px;
+      height: auto;
+      margin-top: 20px;
+    }
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-top: 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* 静态预览图容器 */
+    #static-image {
+      position: absolute;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 120px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f6f2e9;
+    }
+    #static-image img {
+      max-width: 50%;
+      height: auto;
+    }
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      font-size: 0.8rem;
+      color: #777;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: #f6f2e9;
+      box-shadow: 0 -1px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Mrs Su's Mini Room</h1>
+  <!-- 开关控制：切换3D模式和静态模式 -->
+  <div id="toggle-wrapper">
+    <label class="switch">
+      <input type="checkbox" id="mode-toggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+  <!-- 预加载层：加载期间显示提示文字、插图和旋转动画 -->
+  <div id="overlay">
+    <div style="font-size:1.2rem; color:#555;">正在加载3D场景，请稍候…</div>
+    <img src="assets/preview.png" alt="场景预览">
+    <div class="spinner"></div>
+  </div>
+  <!-- 静态模式下显示的预览图 -->
+  <div id="static-image" style="display:none;">
+    <img src="assets/preview.png" alt="静态预览图">
+  </div>
+  <!-- Three.js 渲染画布容器 -->
+  <div id="container"></div>
+  <!-- Footer removed as per user preference -->
+  <!-- 加载脚本：Three.js、OrbitControls 及业务脚本。请务必通过 HTTP 服务访问 -->
+  <!-- 使用 r122 版本的 Three.js，包含 ExtrudeGeometry 等扩展，保证房间几何正常生成 -->
+  <script src="https://unpkg.com/three@0.122.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.122.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
