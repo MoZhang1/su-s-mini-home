@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Mrs Su's Mini Room</title>
+  <!-- Use Tailwind for quick utility styles -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* 基础布局 */
     html, body {
@@ -65,6 +67,32 @@
     }
     input:checked + .slider:before {
       transform: translateX(24px);
+    }
+
+    /* Intro text card styled similar to the reference */
+    .text-overlay {
+      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+    }
+    .text-card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+    .text-card.loaded {
+      left: 1rem;
+      top: 1rem;
+      transform: none;
+    }
+    .text-card.collapsed {
+      transform: translateX(-90%);
+      opacity: 0.8;
     }
     /* Canvas容器 */
     #container {
@@ -148,6 +176,10 @@
       <span class="slider"></span>
     </label>
   </div>
+  <!-- Intro text card -->
+  <div id="intro-card" class="text-card text-overlay loading">
+    欢迎来到我的迷你房间
+  </div>
   <!-- 预加载层：加载期间显示提示文字、插图和旋转动画 -->
   <div id="overlay">
     <div style="font-size:1.2rem; color:#555;">正在加载3D场景，请稍候…</div>
@@ -166,5 +198,20 @@
   <script src="https://unpkg.com/three@0.122.0/build/three.min.js"></script>
   <script src="https://unpkg.com/three@0.122.0/examples/js/controls/OrbitControls.js"></script>
   <script src="main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const overlay = document.getElementById('overlay');
+      const card = document.getElementById('intro-card');
+      function finishLoading() {
+        overlay.style.display = 'none';
+        card.classList.remove('loading');
+        card.classList.add('loaded');
+      }
+      setTimeout(finishLoading, 1500);
+      card.addEventListener('click', function() {
+        card.classList.toggle('collapsed');
+      });
+    });
+  </script>
 </body>
 </html>
